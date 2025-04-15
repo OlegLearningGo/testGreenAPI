@@ -87,6 +87,6 @@ func PostMethod(w http.ResponseWriter, r *http.Request) {
 		}
 		defer res.Body.Close()
 		fmt.Println(res)
-
+		http.Redirect(w, r, "/", http.StatusFound)
 	}
 }
