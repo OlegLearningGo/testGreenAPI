@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+  </head>
+  <body>
+    <header>
+    </header>
+    <main>
+        <section>
+            <form method="GET" action="/submit" enctype="application/x-www-form-urlencoded">
+            <div class="form-example">
+              <label for="name"> 
+                <input type="text" name="IdInstance" placeholder="IdInstance">
+              </label>
+            </div>
+            <div class="form-example">
+              <label for="text">
+                <input type="text" name="APItokenInstance" placeholder="APItokenInstance">
+              </label>
+            </div>
+              <button class="button" name = "action" value="getSettings">getSettings</button>
+             <div>
+            <div>
+              <button class="buttonState" name = "action" value="getStateInstance">getStateInstance</button>
+            </div>  
+          </form>
+        </section>
+        <section>
+            <form method="POST" action="/send" class="form-example">
+            <div class="form-example">
+              <label for="name">
+                <input type="text" name="phonenumber" placeholder="Phone number or chat">
+              </label>
+            </div>
+            <div class="form-example">
+              <label for="text">
+                <input type="text" name="sometext" placeholder="Write text here">
+              </label>
+            </div>
+            <button class="buttonMessage" name = "action" value = "SendMessage" >Send Message</button> <p></p>
+            <form method="POST" action="/send" class="form-example">
+            <div class="form-example">
+                <label for="name">
+                    <input type="text" name="phonenumberforurl" placeholder="Phone number or chat">
+                  </label>
+            </div>
+            <div class="form-example">
+                <label for="url">
+                    <input type="url" name="url" placeholder="URL">
+                  </label></div>
+                  <button class="buttonURL" name = "action" value = "SendByURL">Send File By URL</button> <p></p>
+            </form>
+        </section>
+        <section class="Ans">
+             <text>Answer:</text>
+             <div>
+              <textarea cols="35" rows="30" name="answerhere" class="response-placeholder" id="answer-textarea" readonly>{{.ResponseBody}}</textarea>
+            </div>
+        </section>
+    </main>
+    <footer>    
+     </footer>
+    </body>
+</html>
