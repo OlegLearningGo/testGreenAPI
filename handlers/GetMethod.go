@@ -8,14 +8,15 @@ import (
 	"net/http"
 )
 
-var URLgetSet string
-var IdInstance, Numb, APItokenInstance, WaInstance string
+var (
+	URLgetSet, IdInstance, Numb, APItokenInstance, WaInstance string
+)
 
 func GetMethod(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		err := r.ParseForm()
 		if err != nil {
-			http.Error(w, "Ошибка обработки формы", http.StatusBadRequest)
+			http.Error(w, "Error parsing", http.StatusBadRequest)
 			return
 		}
 		IdInstance = r.FormValue("IdInstance")
@@ -45,12 +46,13 @@ func GetMethod(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(string(body))
 
 		tmpl := template.Must(template.ParseFiles("index.html"))
-		data := struct {
+
+		Data := struct {
 			ResponseBody string
 		}{
 			ResponseBody: string(body),
 		}
-		tmpl.Execute(w, data)
+		tmpl.Execute(w, Data)
 		return
 
 	}

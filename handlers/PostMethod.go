@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"html/template"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"path/filepath"
@@ -29,7 +31,7 @@ func PostMethod(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		err := r.ParseForm()
 		if err != nil {
-			http.Error(w, "Ошибка обработки формы", http.StatusBadRequest)
+			http.Error(w, "Error parsing", http.StatusBadRequest)
 			return
 		}
 		action := r.FormValue("action")
@@ -59,7 +61,6 @@ func PostMethod(w http.ResponseWriter, r *http.Request) {
 				Message: someText,
 			}
 			jsonData, err = json.Marshal(payload)
-
 		case "SendByURL":
 			uRLgetSet = "https://" + Numb + "." + "api.green-api.com/" + WaInstance + "/sendFileByUrl/" + APItokenInstance
 			payload := RequestURL{
@@ -75,18 +76,36 @@ func PostMethod(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(uRLgetSet)
 
 		if err != nil {
-			http.Error(w, "Ошибка создания JSON", http.StatusInternalServerError)
+			http.Error(w, "Error creating JSON", http.StatusInternalServerError)
 			return
 		}
 		fmt.Println(string(jsonData))
 		res, err := http.Post(uRLgetSet, "application/json", bytes.NewBuffer(jsonData))
 		if err != nil {
-			log.Printf("Ошибка при отправке запроса: %v", err)
-			http.Error(w, "Ошибка при отправке запроса", http.StatusBadGateway)
+			log.Printf("Error sending request: %v", err)
+			http.Error(w, "Error sending request", http.StatusBadGateway)
 			return
 		}
 		defer res.Body.Close()
 		fmt.Println(res)
-		http.Redirect(w, r, "/", http.StatusFound)
+		body, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			fmt.Println("Error reading response:", err)
+			return
+		}
+		fmt.Println(string(body))
+
+		tmpl := template.Must(template.ParseFiles("index.html"))
+
+		Data := struct {
+			ResponseBody string
+		}{
+			ResponseBody: string(body),
+		}
+		err = tmpl.Execute(w, Data)
+		if err != nil {
+			http.Error(w, "Error rendering template", http.StatusInternalServerError)
+			return
+		}
 	}
 }

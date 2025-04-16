@@ -57,7 +57,7 @@
         <section class="Ans">
              <text>Answer:</text>
              <div>
-              <textarea cols="35" rows="30" name="answerhere" class="response-placeholder" id="answer-textarea" readonly>{{.ResponseBody}}</textarea>
+              <textarea cols="35" rows="30" name="answerhere" readonly>{{if .ResponseBody}}{{.ResponseBody}}{{end}}</textarea>
             </div>
         </section>
     </main>
